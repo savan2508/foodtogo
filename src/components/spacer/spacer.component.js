@@ -1,4 +1,5 @@
 import { styled } from "styled-components/native";
+import { useTheme } from "styled-components";
 
 const sizesVariant = {
   small: 1,
@@ -20,9 +21,15 @@ const getVariant = (position, size, theme) => {
   return `${property}: ${value}`;
 };
 
-export const Spacer = styled.View`
-  ${({ position, size, theme }) => getVariant(position, size, theme)}
+const SpaceView = styled.View`
+  ${({ variant }) => variant}
 `;
+
+export const Spacer = ({ position, size, children }) => {
+  const theme = useTheme();
+  const variable = getVariant(position, size, theme);
+  return <SpaceView variant={variable}>{children}</SpaceView>;
+};
 
 Spacer.defaultProps = {
   position: "top",
