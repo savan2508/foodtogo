@@ -6,6 +6,7 @@ import { SvgXml } from "react-native-svg";
 
 import star from "../../../assets/star";
 import open from "../../../assets/open";
+import { Spacer } from "../../components/spacer/spacer.component";
 
 const RestaurantCard = styled(Card)`
   background-color: ${(props) => props.theme.colors.bg.primary};
@@ -86,9 +87,9 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
                 CLOSED TEMPORARILY
               </Text>
             )}
-            <View style={{ width: 16 }} />
+            <Spacer variant="left.large" />
             {isOpenNow && <SvgXml xml={open} width={20} height={20} />}
-            <View style={{ width: 16 }} />
+            <Spacer variant="left.large" />
             <Image source={{ uri: icon }} style={{ width: 15, height: 15 }} />
           </SectionEnd>
         </Section>
