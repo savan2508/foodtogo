@@ -2,6 +2,10 @@
  * @module space
  * @description A utility module for creating space around React Native components using styled-components.
  * @exports Spacer
+ * // Example usage of Spacer component
+ * <Spacer position="top" size="medium">
+ *   <Text>This is a text component with space at the top.</Text>
+ * </Spacer>
  */
 
 import { styled } from "styled-components/native";
