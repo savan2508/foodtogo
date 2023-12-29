@@ -59,6 +59,7 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
     address = "100 some random street",
     isOpenNow = true,
     rating = 3.5,
+    placeId = "some place id",
     isClosedTemporarily = true,
   } = restaurant;
 
@@ -76,7 +77,7 @@ export const RestaurantInfoCard = ({ restaurant = {} }) => {
                 xml={star}
                 width={20}
                 height={20}
-                key={`star-${name}-${i}`}
+                key={`star-${placeId}-${i}`}
               />
             ))}
           </Rating>

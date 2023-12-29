@@ -5,11 +5,12 @@
  * @exports RestaurantContextProvider
  */
 
-import { useState, createContext, useEffect } from "react";
+import { useState, createContext, useEffect, useContext } from "react";
 import {
   restaurantsRequest,
   restaurantsTransform,
 } from "./restaurants.service";
+import { LocationContext } from "../locations/location.context";
 
 /**
  * @constant {Object} RestaurantsContext - Context object for managing restaurant data.
@@ -31,16 +32,19 @@ export const RestaurantContextProvider = ({ children }) => {
   const [restaurants, setRestaurants] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { location } = useContext(LocationContext);
 
   /**
    * @function retriveRestaurants
    * @description Retrieves restaurant data, transforms it, and updates the context state.
    * Uses a simulated delay for loading.
    */
-  const retriveRestaurants = () => {
+  const retriveRestaurants = (loc) => {
     setIsLoading(true);
+    setRestaurants([]);
+
     setTimeout(() => {
-      restaurantsRequest()
+      restaurantsRequest(loc)
         .then(restaurantsTransform)
         .then((results) => {
           setIsLoading(false);
@@ -55,8 +59,11 @@ export const RestaurantContextProvider = ({ children }) => {
 
   // Fetch restaurant data on component mount
   useEffect(() => {
-    retriveRestaurants();
-  }, []);
+    if (location) {
+      const locationString = `${location.lat},${location.lng}`;
+      retriveRestaurants(locationString);
+    }
+  }, [location]);
 
   return (
     <RestaurantsContext.Provider
