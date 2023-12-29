@@ -1,12 +1,13 @@
-// Import necessary modules from React Native and third-party libraries
+/**
+ * @module App
+ * @description Main entry point for the React Native application.
+ * @exports App
+ */
 
+// Import necessary modules from React Native and third-party libraries
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
-import { RestaurantsScreen } from "./src/features/restaurants/screens/restaurant.screen";
 import { ThemeProvider } from "styled-components/native";
 import { theme } from "./src/infrastructure/theme";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "@expo/vector-icons/Ionicons";
 
 // Import fonts and Text component from React Native
 import {
@@ -14,83 +15,44 @@ import {
   Oswald_400Regular,
 } from "@expo-google-fonts/oswald";
 import { useFonts as useLato, Lato_400Regular } from "@expo-google-fonts/lato";
-import { Text } from "react-native";
-import { SafeArea } from "./src/components/utility/safe-area.component";
 import { RestaurantContextProvider } from "./src/services/restaurants/restaurants.context";
+import { LocationContextProvider } from "./src/services/locations/location.context";
+import { Navigation } from "./src/infrastructure/navigation";
 
-const Tab = createBottomTabNavigator();
-
-const Settings = () => (
-  <SafeArea>
-    <Text>Settings</Text>
-  </SafeArea>
-);
-
-const Map = () => (
-  <SafeArea>
-    <Text>Map</Text>
-  </SafeArea>
-);
-
-// Main App component
+/**
+ * Main App component.
+ * @function App
+ * @returns {JSX.Element} JSX element representing the main application component.
+ */
 export default function App() {
+  // Load fonts using custom hooks
   const [oswaldLoaded] = useOswald({
     Oswald_400Regular,
   });
   const [latoLoaded] = useLato({
     Lato_400Regular,
   });
+
+  // If fonts are not loaded, return null (show nothing)
   if (!oswaldLoaded || !latoLoaded) {
     return null;
   }
 
-  const TAB_ICON = {
-    Restaurants: "md-restaurant",
-    Settings: "md-settings",
-    Map: "md-map",
-  };
-  const createScreenOptions = ({ route, color }) => {
-    const iconName = TAB_ICON[route.name];
-    return <Ionicons name={iconName} size={22} color={color} />;
-  };
+  // Render the main component tree
   return (
     <>
+      {/* Theme provider for styled components */}
       <ThemeProvider theme={theme}>
-        <RestaurantContextProvider>
-          <NavigationContainer>
-            <Tab.Navigator
-              screenOptions={({ route }) => ({
-                tabBarActiveTintColor: "tomato",
-                tabBarInactiveTintColor: "gray",
-                tabBarStyle: [
-                  {
-                    display: "flex",
-                  },
-                  null,
-                ],
-                tabBarIcon: ({ color }) =>
-                  createScreenOptions({ route, color }),
-              })}
-            >
-              <Tab.Screen
-                name="Restaurants"
-                component={RestaurantsScreen}
-                options={{ headerShown: false }}
-              />
-              <Tab.Screen
-                name="Map"
-                component={Map}
-                options={{ headerShown: false }}
-              />
-              <Tab.Screen
-                name="Settings"
-                component={Settings}
-                options={{ headerShown: false }}
-              />
-            </Tab.Navigator>
-          </NavigationContainer>
-        </RestaurantContextProvider>
+        {/* Context provider for location data */}
+        <LocationContextProvider>
+          {/* Context provider for restaurant data */}
+          <RestaurantContextProvider>
+            {/* Main navigation component */}
+            <Navigation />
+          </RestaurantContextProvider>
+        </LocationContextProvider>
       </ThemeProvider>
+      {/* Expo status bar */}
       <ExpoStatusBar style="auto" />
     </>
   );

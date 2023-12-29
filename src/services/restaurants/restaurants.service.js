@@ -14,7 +14,7 @@ import camelize from "camelize";
  * @param {string} location - Location coordinates in the format "latitude,longitude".
  * @returns {Promise} A Promise that resolves with the restaurant data or rejects with an error message.
  */
-export const restaurantsRequest = (location = "37.7749295,-122.4194155") => {
+export const restaurantsRequest = (location) => {
   return new Promise((resolve, reject) => {
     const mock = mocks[location];
     if (!mock) {
@@ -37,6 +37,7 @@ export const restaurantsTransform = ({ results = [] }) => {
     restaurant.photos = restaurant.photos.map((p) => {
       return mockImages[Math.ceil(Math.random() * (mockImages.length - 1))];
     });
+    restaurant.address = restaurant.vicinity;
     // Add additional properties for convenience
     return {
       ...restaurant,

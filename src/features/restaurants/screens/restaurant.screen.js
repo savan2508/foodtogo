@@ -7,22 +7,15 @@
 // Import necessary modules from React Native and third-party libraries
 import React, { useContext } from "react";
 import { FlatList, View } from "react-native";
-import { Searchbar } from "react-native-paper";
 import { styled } from "styled-components/native";
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { SafeArea } from "../../../components/utility/safe-area.component";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
+import { SearchArea } from "../components/search.component";
 
 // Styled components for the screen layout
-/**
- * @component
- * @description Styled View component for the search container.
- */
-const SearchContainer = styled(View)`
-  padding: ${(props) => props.theme.space[3]};
-`;
 
 /**
  * @component
@@ -70,9 +63,7 @@ export const RestaurantsScreen = () => {
         </LoadingContainer>
       )}
       {/* Search bar container */}
-      <SearchContainer>
-        <Searchbar />
-      </SearchContainer>
+      <SearchArea />
 
       {/* List of restaurants */}
       <RestaurantList
