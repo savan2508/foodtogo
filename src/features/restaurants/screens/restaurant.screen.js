@@ -6,7 +6,7 @@
 
 // Import necessary modules from React Native and third-party libraries
 import React, { useContext } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, TouchableOpacity, View } from "react-native";
 import { styled } from "styled-components/native";
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
 import { Spacer } from "../../../components/spacer/spacer.component";
@@ -16,7 +16,6 @@ import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { SearchArea } from "../components/search.component";
 
 // Styled components for the screen layout
-
 /**
  * @component
  * @description Styled FlatList component for displaying the list of restaurants.
@@ -49,7 +48,8 @@ const LoadingContainer = styled(View)`
  * @component
  * @description Main functional component for the RestaurantsScreen.
  */
-export const RestaurantsScreen = () => {
+
+export const RestaurantsScreen = ({ navigation }) => {
   // Get restaurant data from the context
   const { isLoading, error, restaurants } = useContext(RestaurantsContext);
 
@@ -68,12 +68,24 @@ export const RestaurantsScreen = () => {
       {/* List of restaurants */}
       <RestaurantList
         data={restaurants}
-        renderItem={({ item }) => (
-          <Spacer position="bottom" size="large">
-            {/* Restaurant card */}
-            <RestaurantInfoCard restaurant={item} />
-          </Spacer>
-        )}
+        renderItem={({ item }) => {
+          return (
+            <>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("RestaurantDetails", {
+                    restaurant: item,
+                  })
+                }
+              >
+                <Spacer position="bottom" size="large">
+                  {/* Restaurant card */}
+                  <RestaurantInfoCard restaurant={item} />
+                </Spacer>
+              </TouchableOpacity>
+            </>
+          );
+        }}
         keyExtractor={(item) => item.name}
         contentContainerStyle={{ padding: 16 }}
       />

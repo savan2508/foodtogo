@@ -1,10 +1,9 @@
+import "react-native-gesture-handler";
 // Import necessary modules from React Native and third-party libraries
 
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
-import { RestaurantsScreen } from "./src/features/restaurants/screens/restaurant.screen";
 import { ThemeProvider } from "styled-components/native";
 import { theme } from "./src/infrastructure/theme";
-import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
@@ -18,6 +17,8 @@ import { Text } from "react-native";
 import { SafeArea } from "./src/components/utility/safe-area.component";
 import { RestaurantContextProvider } from "./src/services/restaurants/restaurants.context";
 import { LocationContextProvider } from "./src/services/locations/location.context";
+import { AppNavigator } from "./src/infrastructure/navigation/app.navigator";
+import { Navigation } from "./src/infrastructure/navigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -59,38 +60,7 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <LocationContextProvider>
           <RestaurantContextProvider>
-            <NavigationContainer>
-              <Tab.Navigator
-                screenOptions={({ route }) => ({
-                  tabBarActiveTintColor: "tomato",
-                  tabBarInactiveTintColor: "gray",
-                  tabBarStyle: [
-                    {
-                      display: "flex",
-                    },
-                    null,
-                  ],
-                  tabBarIcon: ({ color }) =>
-                    createScreenOptions({ route, color }),
-                })}
-              >
-                <Tab.Screen
-                  name="Restaurants"
-                  component={RestaurantsScreen}
-                  options={{ headerShown: false }}
-                />
-                <Tab.Screen
-                  name="Map"
-                  component={Map}
-                  options={{ headerShown: false }}
-                />
-                <Tab.Screen
-                  name="Settings"
-                  component={Settings}
-                  options={{ headerShown: false }}
-                />
-              </Tab.Navigator>
-            </NavigationContainer>
+            <Navigation />
           </RestaurantContextProvider>
         </LocationContextProvider>
       </ThemeProvider>
