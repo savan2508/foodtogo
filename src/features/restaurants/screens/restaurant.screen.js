@@ -14,6 +14,7 @@ import { SafeArea } from "../../../components/utility/safe-area.component";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { SearchArea } from "../components/search.component";
+import { FavouritesContext } from "../../../services/favourites/favourites.context";
 
 // Styled components for the screen layout
 /**
@@ -52,6 +53,7 @@ const LoadingContainer = styled(View)`
 export const RestaurantsScreen = ({ navigation }) => {
   // Get restaurant data from the context
   const { isLoading, error, restaurants } = useContext(RestaurantsContext);
+  const { favourites } = useContext(FavouritesContext);
 
   // Render the main component tree
   return (

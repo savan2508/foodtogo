@@ -19,20 +19,9 @@ import { RestaurantContextProvider } from "./src/services/restaurants/restaurant
 import { LocationContextProvider } from "./src/services/locations/location.context";
 import { AppNavigator } from "./src/infrastructure/navigation/app.navigator";
 import { Navigation } from "./src/infrastructure/navigation";
+import { FavouriteContextProvider } from "./src/services/favourites/favourites.context";
 
 const Tab = createBottomTabNavigator();
-
-const Settings = () => (
-  <SafeArea>
-    <Text>Settings</Text>
-  </SafeArea>
-);
-
-const Map = () => (
-  <SafeArea>
-    <Text>Map</Text>
-  </SafeArea>
-);
 
 // Main App component
 export default function App() {
@@ -58,11 +47,13 @@ export default function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <LocationContextProvider>
-          <RestaurantContextProvider>
-            <Navigation />
-          </RestaurantContextProvider>
-        </LocationContextProvider>
+        <FavouriteContextProvider>
+          <LocationContextProvider>
+            <RestaurantContextProvider>
+              <Navigation />
+            </RestaurantContextProvider>
+          </LocationContextProvider>
+        </FavouriteContextProvider>
       </ThemeProvider>
       <ExpoStatusBar style="auto" />
     </>
