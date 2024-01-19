@@ -4,8 +4,8 @@ import "react-native-gesture-handler";
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import { ThemeProvider } from "styled-components/native";
 import { theme } from "./src/infrastructure/theme";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import firebase from "firebase/compat";
+import { initializeApp } from "firebase/app";
 
 // Import fonts and Text component from React Native
 import {
@@ -13,18 +13,43 @@ import {
   Oswald_400Regular,
 } from "@expo-google-fonts/oswald";
 import { useFonts as useLato, Lato_400Regular } from "@expo-google-fonts/lato";
-import { Text } from "react-native";
-import { SafeArea } from "./src/components/utility/safe-area.component";
 import { RestaurantContextProvider } from "./src/services/restaurants/restaurants.context";
 import { LocationContextProvider } from "./src/services/locations/location.context";
-import { AppNavigator } from "./src/infrastructure/navigation/app.navigator";
 import { Navigation } from "./src/infrastructure/navigation";
 import { FavouriteContextProvider } from "./src/services/favourites/favourites.context";
+import { useEffect, useState } from "react";
+import {
+  AuthenticationContext,
+  AuthenticationContextProvider,
+} from "./src/services/authentication/authentication.context";
 
-const Tab = createBottomTabNavigator();
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDmKjPYAVuV21WzbePNSEuEIC74i1_Fvy8",
+  authDomain: "foodtogo-d9247.firebaseapp.com",
+  projectId: "foodtogo-d9247",
+  storageBucket: "foodtogo-d9247.appspot.com",
+  messagingSenderId: "596026741629",
+  appId: "1:596026741629:web:0cf61d13cd27c2ca80b214",
+};
+
+firebase.initializeApp(firebaseConfig);
 
 // Main App component
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  useEffect(() => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword("email", "password")
+      .then((user) => {
+        console.log(user);
+        setIsAuthenticated(true);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
   const [oswaldLoaded] = useOswald({
     Oswald_400Regular,
   });
@@ -35,25 +60,18 @@ export default function App() {
     return null;
   }
 
-  const TAB_ICON = {
-    Restaurants: "md-restaurant",
-    Settings: "md-settings",
-    Map: "md-map",
-  };
-  const createScreenOptions = ({ route, color }) => {
-    const iconName = TAB_ICON[route.name];
-    return <Ionicons name={iconName} size={22} color={color} />;
-  };
   return (
     <>
       <ThemeProvider theme={theme}>
-        <FavouriteContextProvider>
-          <LocationContextProvider>
-            <RestaurantContextProvider>
-              <Navigation />
-            </RestaurantContextProvider>
-          </LocationContextProvider>
-        </FavouriteContextProvider>
+        <AuthenticationContextProvider>
+          <FavouriteContextProvider>
+            <LocationContextProvider>
+              <RestaurantContextProvider>
+                <Navigation />
+              </RestaurantContextProvider>
+            </LocationContextProvider>
+          </FavouriteContextProvider>
+        </AuthenticationContextProvider>
       </ThemeProvider>
       <ExpoStatusBar style="auto" />
     </>

@@ -5,7 +5,7 @@
  */
 
 // Import necessary modules from React Native and third-party libraries
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { FlatList, TouchableOpacity, View } from "react-native";
 import { styled } from "styled-components/native";
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
@@ -15,6 +15,7 @@ import { RestaurantsContext } from "../../../services/restaurants/restaurants.co
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { SearchArea } from "../components/search.component";
 import { FavouritesContext } from "../../../services/favourites/favourites.context";
+import { FavouritesBar } from "../../../components/favaourites/favourites-bar.component";
 
 // Styled components for the screen layout
 /**
@@ -54,6 +55,7 @@ export const RestaurantsScreen = ({ navigation }) => {
   // Get restaurant data from the context
   const { isLoading, error, restaurants } = useContext(RestaurantsContext);
   const { favourites } = useContext(FavouritesContext);
+  const [isToggled, setIsToggled] = useState(false);
 
   // Render the main component tree
   return (
@@ -65,7 +67,16 @@ export const RestaurantsScreen = ({ navigation }) => {
         </LoadingContainer>
       )}
       {/* Search bar container */}
-      <SearchArea />
+      <SearchArea
+        isFavouriteToggled={isToggled}
+        onFavouriteToggle={() => setIsToggled(!isToggled)}
+      />
+      {isToggled && (
+        <FavouritesBar
+          favourites={favourites}
+          onNavigate={navigation.navigate}
+        />
+      )}
 
       {/* List of restaurants */}
       <RestaurantList

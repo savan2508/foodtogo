@@ -4,7 +4,7 @@ import { styled } from "styled-components/native";
 import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 
-const FavouriteButton = styled.TouchableOpacity`
+const FavouriteButton = styled(TouchableOpacity)`
   background-color: transparent;
   border-color: #20232a;
   position: absolute;
@@ -12,12 +12,24 @@ const FavouriteButton = styled.TouchableOpacity`
   right: 25px;
   z-index: 9;
 `;
-export const Favourite = () => {
+export const Favourite = ({ restaurant }) => {
   const { favourites, addToFavourites, removeFromFavourites } =
     useContext(FavouritesContext);
+
+  const isFavourite = favourites.find((r) => r.placeId === restaurant.placeId);
   return (
-    <FavouriteButton>
-      <AntDesign name="heart" size={24} color="red" />
+    <FavouriteButton
+      onPress={() =>
+        !isFavourite
+          ? addToFavourites(restaurant)
+          : removeFromFavourites(restaurant)
+      }
+    >
+      <AntDesign
+        name={isFavourite ? "heart" : "hearto"}
+        size={24}
+        color={isFavourite ? "red" : "white"}
+      />
     </FavouriteButton>
   );
 };

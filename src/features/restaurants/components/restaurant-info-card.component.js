@@ -50,25 +50,23 @@ import { Favourite } from "../../../components/favaourites/favourites.component"
  * @property {Object} props.restaurant - The restaurant object containing information such as name, rating, photos, address, etc.
  */
 
-export const RestaurantInfoCard = ({ restaurant = {} }) => {
+export const RestaurantInfoCard = ({ restaurant }) => {
   const {
-    name = "Some Restaurant",
-    icon = "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
-    photos = [
-      "https://www.foodiesfeed.com/wp-content/uploads/2019/06/top-view-for-box-of-2-burgers-home-made-600x899.jpg",
-    ],
-    address = "100 some random street",
-    isOpenNow = true,
-    rating = 3.5,
-    placeId = "some place id",
-    isClosedTemporarily = true,
+    name,
+    icon,
+    photos,
+    address,
+    isOpenNow,
+    rating,
+    placeId,
+    isClosedTemporarily,
   } = restaurant;
 
   const ratingArray = Array.from(new Array(Math.floor(Math.ceil(rating))));
 
   return (
     <RestaurantCard elevation={5}>
-      <Favourite />
+      <Favourite restaurant={restaurant} />
       <RestaurantCardCover source={{ uri: photos[0] }} key={name} />
       <Info>
         <TextCustom variant="label">{name}</TextCustom>
