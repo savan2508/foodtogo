@@ -1,5 +1,6 @@
 import { createContext, useState } from "react";
 import { loginRequest } from "./authentication.service";
+import firebase from "firebase/compat";
 
 export const AuthenticationContext = createContext();
 
@@ -7,6 +8,15 @@ export const AuthenticationContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  firebase.auth().onAuthStateChanged((usr) => {
+    if (usr) {
+      setUser(usr);
+      // setIsLoading(false);
+    } else {
+      // setIsLoading(false);
+    }
+  });
 
   const onLogin = (email, password) => {
     setIsLoading(true);
@@ -16,7 +26,6 @@ export const AuthenticationContextProvider = ({ children }) => {
         setIsLoading(false);
       })
       .catch((error) => {
-        // console.log(error);
         setIsLoading(false);
         setError(error);
       });
@@ -29,15 +38,25 @@ export const AuthenticationContextProvider = ({ children }) => {
       setIsLoading(false);
       return;
     }
-    registerRequest(email, password)
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
       .then((u) => {
         setUser(u);
         setIsLoading(false);
       })
-      .catch((error) => {
-        // console.log(error);
+      .catch((e) => {
         setIsLoading(false);
-        setError(error);
+        setError(e.toString());
+      });
+  };
+
+  const onLogout = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        setUser(null);
       });
   };
 
@@ -50,6 +69,7 @@ export const AuthenticationContextProvider = ({ children }) => {
         error,
         onLogin,
         onRegister,
+        onLogout,
       }}
     >
       {children}

@@ -4,21 +4,31 @@ import { SafeArea } from "../../components/utility/safe-area.component";
 import { Text } from "react-native";
 import { RestaurantsNavigator } from "./restaurants.navigator";
 import { MapScreen } from "../../features/map/screens/map.screen";
+import { Button } from "react-native";
+import { AuthenticationContext } from "../../services/authentication/authentication.context";
+import { useContext } from "react";
+import { FavouriteContextProvider } from "../../services/favourites/favourites.context";
+import { LocationContextProvider } from "../../services/locations/location.context";
+import { RestaurantContextProvider } from "../../services/restaurants/restaurants.context";
 
 // Settings screen component
-const Settings = () => (
-  <SafeArea>
-    <Text>Settings</Text>
-  </SafeArea>
-);
+const Settings = () => {
+  const { onLogout } = useContext(AuthenticationContext);
+  return (
+    <SafeArea>
+      <Text>Settings</Text>
+      <Button title={"Logout"} onPress={() => onLogout()} />
+    </SafeArea>
+  );
+};
 
 // Create a bottom tab navigator
 const Tab = createBottomTabNavigator();
 // Icon configurations for bottom tab navigation
 const TAB_ICON = {
-  Restaurants: "md-restaurant",
-  Settings: "md-settings",
-  Map: "md-map",
+  Restaurants: "restaurant",
+  Settings: "settings",
+  Map: "map",
 };
 
 /**
@@ -35,39 +45,46 @@ const createScreenOptions = ({ route, color }) => {
 export const AppNavigator = () => {
   return (
     <>
-      {/* Bottom tab navigator */}
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarActiveTintColor: "tomato",
-          tabBarInactiveTintColor: "gray",
-          tabBarStyle: [
-            {
-              display: "flex",
-            },
-            null,
-          ],
-          tabBarIcon: ({ color }) => createScreenOptions({ route, color }),
-        })}
-      >
-        {/* Screen for displaying restaurant data */}
-        <Tab.Screen
-          name="Restaurants"
-          component={RestaurantsNavigator}
-          options={{ headerShown: false }}
-        />
-        {/* Screen for the map */}
-        <Tab.Screen
-          name="Map"
-          component={MapScreen}
-          options={{ headerShown: false }}
-        />
-        {/* Screen for app settings */}
-        <Tab.Screen
-          name="Settings"
-          component={Settings}
-          options={{ headerShown: false }}
-        />
-      </Tab.Navigator>
+      <FavouriteContextProvider>
+        <LocationContextProvider>
+          <RestaurantContextProvider>
+            {/* Bottom tab navigator */}
+            <Tab.Navigator
+              screenOptions={({ route }) => ({
+                tabBarActiveTintColor: "tomato",
+                tabBarInactiveTintColor: "gray",
+                tabBarStyle: [
+                  {
+                    display: "flex",
+                  },
+                  null,
+                ],
+                tabBarIcon: ({ color }) =>
+                  createScreenOptions({ route, color }),
+              })}
+            >
+              {/* Screen for displaying restaurant data */}
+              <Tab.Screen
+                name="Restaurants"
+                component={RestaurantsNavigator}
+                options={{ headerShown: false }}
+              />
+              {/* Screen for the map */}
+              <Tab.Screen
+                name="Map"
+                component={MapScreen}
+                options={{ headerShown: false }}
+              />
+              {/* Screen for app settings */}
+              <Tab.Screen
+                name="Settings"
+                component={Settings}
+                options={{ headerShown: false }}
+              />
+            </Tab.Navigator>
+          </RestaurantContextProvider>
+        </LocationContextProvider>
+      </FavouriteContextProvider>
     </>
   );
 };

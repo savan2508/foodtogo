@@ -18,6 +18,7 @@ export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { onLogin, isLoading, error } = useContext(AuthenticationContext);
+  console.log(isLoading);
 
   return (
     <>
