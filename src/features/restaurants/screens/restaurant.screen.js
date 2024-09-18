@@ -16,6 +16,7 @@ import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { SearchArea } from "../components/search.component";
 import { FavouritesContext } from "../../../services/favourites/favourites.context";
 import { FavouritesBar } from "../../../components/favaourites/favourites-bar.component";
+import { FadeInView } from "../../../components/animations/fade.animation";
 
 // Styled components for the screen layout
 /**
@@ -93,7 +94,9 @@ export const RestaurantsScreen = ({ navigation }) => {
               >
                 <Spacer position="bottom" size="large">
                   {/* Restaurant card */}
-                  <RestaurantInfoCard restaurant={item} />
+                  <FadeInView>
+                    <RestaurantInfoCard restaurant={item} />
+                  </FadeInView>
                 </Spacer>
               </TouchableOpacity>
             </>

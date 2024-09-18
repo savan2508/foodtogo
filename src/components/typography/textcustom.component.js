@@ -64,13 +64,5 @@ const variants = {
  */
 export const TextCustom = styled.Text`
   ${({ theme }) => defaultTextStyles(theme)}
-  ${({ variant, theme }) => variants[variant](theme)}
+  ${({ variant = "body", theme }) => variants[variant](theme)}
 `;
-
-/**
- * @defaultprops
- * @property {string} variant - The default text variant for the TextCustom component (body).
- */
-TextCustom.defaultProps = {
-  variant: "body",
-};

@@ -66,10 +66,10 @@ const SpaceView = styled.View`
  *   <Text>This is a text component with space at the top.</Text>
  * </Spacer>
  */
-export const Spacer = ({ position, size, children }) => {
+export const Spacer = ({ position = "top", size = "small", children }) => {
   const theme = useTheme();
-  const variable = getVariant(position, size, theme);
-  return <SpaceView variant={variable}>{children}</SpaceView>;
+  const variant = getVariant(position, size, theme);
+  return <SpaceView variant={variant}>{children}</SpaceView>;
 };
 
 /**
@@ -77,7 +77,3 @@ export const Spacer = ({ position, size, children }) => {
  * @property {string} position - The default position for the Spacer component (top).
  * @property {string} size - The default size for the Spacer component (small).
  */
-Spacer.defaultProps = {
-  position: "top",
-  size: "small",
-};

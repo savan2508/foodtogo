@@ -52,14 +52,16 @@ import { Favourite } from "../../../components/favaourites/favourites.component"
 
 export const RestaurantInfoCard = ({ restaurant }) => {
   const {
-    name,
-    icon,
-    photos,
-    address,
-    isOpenNow,
-    rating,
-    placeId,
-    isClosedTemporarily,
+    name = "Some Restaurant",
+    icon = "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
+    photos = [
+      "https://www.foodiesfeed.com/wp-content/uploads/2019/06/top-view-for-box-of-2-burgers-home-made-600x899.jpg",
+    ],
+    address = "100 some random street",
+    isOpenNow = true,
+    rating = 3.5,
+    placeId = "somePlaceId",
+    isClosedTemporarily = false,
   } = restaurant;
 
   const ratingArray = Array.from(new Array(Math.floor(Math.ceil(rating))));
@@ -97,22 +99,4 @@ export const RestaurantInfoCard = ({ restaurant }) => {
       </Info>
     </RestaurantCard>
   );
-};
-
-/**
- * @defaultprops
- * @property {Object} restaurant - Default restaurant object with placeholder values.
- */
-RestaurantInfoCard.defaultProps = {
-  restaurant: {
-    name: "Some Restaurant",
-    icon: "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
-    photos: [
-      "https://www.foodiesfeed.com/wp-content/uploads/2019/06/top-view-for-box-of-2-burgers-home-made-600x899.jpg",
-    ],
-    address: "100 some random street",
-    isOpenNow: true,
-    rating: 3.5,
-    isClosedTemporarily: true,
-  },
 };
