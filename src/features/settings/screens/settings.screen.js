@@ -1,4 +1,3 @@
-// Settings screen component
 import { AuthenticationContext } from "../../../services/authentication/authentication.context";
 import { SafeArea } from "../../../components/utility/safe-area.component";
 import { useContext } from "react";
@@ -6,7 +5,7 @@ import { Avatar, List } from "react-native-paper";
 import { styled } from "styled-components/native";
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { TextCustom } from "../../../components/typography/textcustom.component";
-import { FavouritesScreen } from "./favourites.screen";
+import { TouchableOpacity } from "react-native";
 
 const SettingsItem = styled(List.Item)`
   padding: ${(props) => props.theme.space[3]};
@@ -22,7 +21,10 @@ export const SettingsScreen = ({ navigation }) => {
     <SafeArea>
       <Spacer position="top" size="large" />
       <AvatarContainer>
-        <Avatar.Icon size={180} icon="human" backgroundColor="#2182BD" />
+        <TouchableOpacity onPress={() => navigation.navigate("Camera")}>
+          <Avatar.Icon size={180} icon="human" backgroundColor="#2182BD" />
+        </TouchableOpacity>
+
         <Spacer position="top" size="large">
           <TextCustom variant="label">{user.email}</TextCustom>
         </Spacer>
