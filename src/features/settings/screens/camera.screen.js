@@ -1,10 +1,11 @@
-import { CameraView, useCameraPermissions, CameraType } from "expo-camera";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { styled } from "styled-components/native";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { TextCustom } from "../../../components/typography/textcustom.component";
 import { Button, Icon } from "react-native-paper";
-import { useFocusEffect } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
+import { useAppState } from "@react-native-community/hooks";
 
 const ProfileCamera = styled(CameraView)`
   width: 100%;
@@ -57,19 +58,18 @@ export const CameraScreen = () => {
   const [facing, setFacing] = useState("front");
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef(null);
-  const [isCameraActive, setIsCameraActive] = useState(false);
+
+  const isFocused = useIsFocused();
+  const appState = useAppState();
+  const isActive = isFocused && appState === "active";
+  console.log("isActive", isActive);
+
   const Snap = async () => {
     if (cameraRef.current) {
       const photo = await cameraRef.current.takePictureAsync();
       console.log(photo);
     }
   };
-
-  useFocusEffect(() => {
-    setIsCameraActive(true);
-  });
-  console.log(isCameraActive);
-  console.log(permission);
 
   if (!permission) {
     return <View />;
@@ -81,7 +81,9 @@ export const CameraScreen = () => {
         <NoPermissionMessage>
           Access to camera has been denied.
         </NoPermissionMessage>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Button onPress={requestPermission} title="grant permission">
+          Grant Permission
+        </Button>
       </CameraContainer>
     );
   }
@@ -92,26 +94,28 @@ export const CameraScreen = () => {
 
   return (
     <CameraContainer>
-      <ProfileCamera
-        facing={facing}
-        ref={(camera) => (cameraRef.current = camera)}
-        ratio="1:1"
-        active={isCameraActive}
-      >
-        <ButtonContainer>
-          <FlipCameraButton onPress={toggleCameraFacing}>
-            <Icon
-              name="camera-flip"
-              size={35}
-              color="white"
-              source="camera-flip"
-            />
-          </FlipCameraButton>
-          <SnapButton onPress={Snap}>
-            <Icon name="camera" size={35} color="black" source="camera" />
-          </SnapButton>
-        </ButtonContainer>
-      </ProfileCamera>
+      {isActive && (
+        <ProfileCamera
+          facing={facing}
+          ref={(camera) => (cameraRef.current = camera)}
+          ratio="1:1"
+          active={isActive}
+        >
+          <ButtonContainer>
+            <FlipCameraButton onPress={toggleCameraFacing}>
+              <Icon
+                name="camera-flip"
+                size={35}
+                color="white"
+                source="camera-flip"
+              />
+            </FlipCameraButton>
+            <SnapButton onPress={Snap}>
+              <Icon name="camera" size={35} color="black" source="camera" />
+            </SnapButton>
+          </ButtonContainer>
+        </ProfileCamera>
+      )}
     </CameraContainer>
   );
 };

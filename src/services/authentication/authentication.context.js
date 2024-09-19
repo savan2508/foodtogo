@@ -7,7 +7,6 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-  getAuth,
 } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -31,13 +30,16 @@ if (getApps().length === 0) {
 }
 
 let auth;
-try {
-  auth = getAuth();
-} catch (e) {
-  const auth = initializeAuth(app, {
-    persistence: getReactNativePersistence(AsyncStorage),
-  });
-}
+auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage),
+});
+// if (getAuth(app)._isInitialized) {
+//   auth = getAuth(app); // Get the existing auth instance
+// } else {
+//   auth = initializeAuth(app, {
+//     persistence: getReactNativePersistence(AsyncStorage),
+//   });
+// }
 
 export const AuthenticationContextProvider = ({ children }) => {
   const [user, setUser] = useState(null);
